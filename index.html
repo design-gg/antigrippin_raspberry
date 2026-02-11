@@ -234,7 +234,7 @@ function pauseBackgroundBanners(state){
 
     iframes.forEach(frame=>{
         frame.style.pointerEvents = state ? 'none' : 'auto';
-        frame.style.filter = state ? 'brightness(0.6)' : 'none';
+        frame.style.filter = state ? 'brightness(0.2)' : 'none';
     });
 }
 
@@ -263,3 +263,4 @@ window.addEventListener('load', function(){
 
 </body>
 </html>
+
