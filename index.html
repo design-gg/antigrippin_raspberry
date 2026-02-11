@@ -38,7 +38,7 @@
         
         .banner-item {
             transition: transform 0.2s ease;
-            min-height: 500px; /* Стандартная высота баннера */
+            min-height: 480px; /* Стандартная высота баннера */
             padding:0;
             text-align:center;
 
@@ -56,8 +56,8 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border:1px solid #B8C1C5;
-            width: 300px;
-            height: 500px;
+            width: 320px;
+            height: 480px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -66,23 +66,23 @@
         }
         
         .banner-container canvas {
-            max-width: 300px;
-            max-height: 500px;
+            max-width: 320px;
+            max-height: 480px;
 
         }
         
-        @media (max-width: 300px) {
+        @media (max-width: 320px) {
             .banners-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
                 gap: 15px;
             }
             
             .banner-item {
-                height: 500px;
+                height: 480px;
             }
         }
         
-        @media (max-width: 300px) {
+        @media (max-width: 320px) {
             .banners-grid {
                 grid-template-columns: 1fr;
             }
@@ -103,8 +103,8 @@
     <script>
         // Конфигурация баннеров
         const bannersConfig = [
-            {name: 'banner1', folder: 'banners/banner-1/', htmlFile: 'index.html', width: 300, height: 500, text:"Версия #1"},
-            {name: 'banner2', folder: 'banners/banner-2/', htmlFile: 'index.html', width: 300, height: 500, text:"Версия #2"}, 
+            {name: 'banner1', folder: 'banners/banner1/', htmlFile: 'index.html', width: 320, height: 480, text:"Версия #1"},
+            {name: 'banner2', folder: 'banners/banner2/', htmlFile: 'index.html', width: 320, height: 480, text:"Версия #2"}, 
             
             // Добавляйте новые баннеры здесь по мере их создания
         ];
@@ -193,3 +193,4 @@
     </script>
 </body>
 </html>
+
