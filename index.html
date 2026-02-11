@@ -1,60 +1,195 @@
 <!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="UTF-8">
-  <meta name="authoring-tool" content="Adobe_Animate_CC">
-  <meta name="ad.size" content="width=320,height=480">
-  <script src="gsap.min.js"></script>
-  <script src="Physics2DPlugin.min.js"></script>
-  <title>index</title>
-  <!-- write your code here -->
-<script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
-<script src="index.js"></script>
-<script>
-var canvas, stage, exportRoot;
-function init() {
-	canvas = document.getElementById("canvas");
-	var comp=AdobeAn.getComposition("DA49175CD3D7BB4585071F22B8A77700");
-	var lib=comp.getLibrary();
-	var loader = new createjs.LoadQueue(false);
-	loader.addEventListener("fileload", function(evt){handleFileLoad(evt,comp)});
-	loader.addEventListener("complete", function(evt){handleComplete(evt,comp)});	
-	var lib=comp.getLibrary();
-	loader.loadManifest(lib.properties.manifest);
-}
-function handleFileLoad(evt, comp) {
-	var images=comp.getImages();	
-	if (evt && (evt.item.type == "image")) { images[evt.item.id] = evt.result; }	
-}
-function handleComplete(evt,comp) {
-	//This function is always called, irrespective of the content. You can use the variable "stage" after it is created in token create_stage.
-	var lib=comp.getLibrary();
-	var ss=comp.getSpriteSheet();
-	var queue = evt.target;
-	var ssMetadata = lib.ssMetadata;
-	for(i=0; i<ssMetadata.length; i++) {
-		ss[ssMetadata[i].name] = new createjs.SpriteSheet( {"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames} )
-	}
-	exportRoot = new lib._320x480();
-	stage = new lib.Stage(canvas);	
-	//Registers the "tick" event listener.
-	fnStartAnimation = function() {
-		stage.addChild(exportRoot);
-		createjs.Ticker.framerate = lib.properties.fps;
-		createjs.Ticker.addEventListener("tick", stage);
-	}	    
-	//Code to support hidpi screens and responsive scaling.
-	AdobeAn.makeResponsive(false,'both',false,1,[canvas]);	
-	AdobeAn.compositionLoaded(lib.properties.id);
-	fnStartAnimation();
-}
-</script>
-	<!-- write your code here -->
-</style>
-	</head>
-	<body onload="init();" style="margin:0px;">
-<div id="Stage" >		
-    <canvas id="canvas" width="320" height="480" style="display: block; background-color:rgba(255, 255, 255, 1.00)"></canvas>
-</div>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <title>HTML5 ДелоБанка версии</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .banners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 300px);
+            gap: 20px;
+            padding: 0;
+            align-items: flex-end;
+            justify-content: center;
+            
+
+        }
+        
+        .banner-item {
+            transition: transform 0.2s ease;
+            min-height: 500px; /* Стандартная высота баннера */
+            padding:0;
+            text-align:center;
+
+            
+        }
+    .banner-item-text {
+        font-size: 12px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        color:#4C4F51;
+        margin-bottom:20px;
+    }
+        
+        .banner-container {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border:1px solid #B8C1C5;
+            width: 300px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding:0;
+            overflow:hidden;
+        }
+        
+        .banner-container canvas {
+            max-width: 300px;
+            max-height: 500px;
+
+        }
+        
+        @media (max-width: 300px) {
+            .banners-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 15px;
+            }
+            
+            .banner-item {
+                height: 500px;
+            }
+        }
+        
+        @media (max-width: 300px) {
+            .banners-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="banners-grid" id="bannersGrid">
+            <!-- Баннеры будут добавляться динамически через JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Конфигурация баннеров
+        const bannersConfig = [
+            {name: 'banner1', folder: 'banners/banner-1/', htmlFile: 'index.html', width: 300, height: 500, text:"Версия #1"},
+            {name: 'banner2', folder: 'banners/banner-2/', htmlFile: 'index.html', width: 300, height: 500, text:"Версия #2"}, 
+            
+            // Добавляйте новые баннеры здесь по мере их создания
+        ];
+
+        // Функция для загрузки и отображения баннеров
+        function loadBanners() {
+            const grid = document.getElementById('bannersGrid');
+            
+            bannersConfig.forEach(banner => {
+                // Создаем контейнер для баннера
+                const bannerItem = document.createElement('div');
+                bannerItem.className = 'banner-item';
+                
+                const bannerContainer = document.createElement('div');
+                bannerContainer.className = 'banner-container';
+
+                const bannerText = document.createElement('div');
+                bannerText.className = 'banner-item-text';
+                bannerText.textContent = banner.text;
+                
+                // Создаем iframe для баннера
+                const iframe = document.createElement('iframe');
+                iframe.src = banner.folder + banner.htmlFile;
+                iframe.width = banner.width;
+                iframe.height = banner.height;
+                iframe.frameBorder = '0';
+                iframe.scrolling = 'no';
+                iframe.style.border = 'none';
+                iframe.loading = 'lazy'; // Ленивая загрузка
+                
+                // Добавляем элементы в DOM
+                bannerContainer.appendChild(iframe);
+                bannerItem.appendChild(bannerContainer);
+                bannerItem.prepend(bannerText);
+                grid.appendChild(bannerItem);
+            });
+        }
+
+        // Альтернативная версия с загрузкой через object (если iframe не работает)
+        function loadBannersAlternative() {
+            const grid = document.getElementById('bannersGrid');
+            
+            bannersConfig.forEach(banner => {
+                const bannerItem = document.createElement('div');
+                bannerItem.className = 'banner-item';
+                
+                const bannerContainer = document.createElement('div');
+                bannerContainer.className = 'banner-container';
+                
+                // Используем object вместо iframe
+                const object = document.createElement('object');
+                object.data = banner.folder + banner.htmlFile;
+                object.type = 'text/html';
+                object.width = banner.width;
+                object.height = banner.height;
+                object.style.display = 'block';
+                
+                // Fallback content
+                const fallback = document.createElement('div');
+                fallback.textContent = `Баннер ${banner.name} не может быть загружен`;
+                object.appendChild(fallback);
+                
+                bannerContainer.appendChild(object);
+                bannerItem.appendChild(bannerContainer);
+                grid.appendChild(bannerItem);
+            });
+        }
+
+        // Загружаем баннеры при полной загрузке страницы
+        window.addEventListener('load', function() {
+            try {
+                loadBanners(); // Пытаемся загрузить через iframe
+            } catch (error) {
+                console.log('Iframe не поддерживается, пробуем альтернативный метод');
+                loadBannersAlternative(); // Альтернативный метод
+            }
+        });
+
+        // Функция для добавления нового баннера (можно вызывать из консоли)
+        function addNewBanner(bannerConfig) {
+            bannersConfig.push(bannerConfig);
+            const grid = document.getElementById('bannersGrid');
+            grid.innerHTML = ''; // Очищаем сетку
+            loadBanners(); // Перезагружаем все баннеры
+        }
+    </script>
 </body>
 </html>
