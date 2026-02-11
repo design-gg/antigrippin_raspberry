@@ -102,6 +102,66 @@
                 padding: 10px;
             }
         }
+.open-btn {
+    margin-top: 10px;
+    display: inline-block;
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    color: #0057FF;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.overlay-content {
+    position: relative;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.overlay-content iframe {
+    width: 320px;
+    height: 480px;
+    border: none;
+}
+
+.overlay-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: #000;
+    color: #fff;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+body.overlay-open {
+    overflow: hidden;
+}
+        
     </style>
 </head>
 <body>
@@ -129,6 +189,17 @@
                 // Создаем контейнер для баннера
                 const bannerItem = document.createElement('div');
                 bannerItem.className = 'banner-item';
+
+                                // Кнопка открытия
+                const openBtn = document.createElement('div');
+                openBtn.className = 'open-btn';
+                openBtn.textContent = 'открыть в окне';
+                
+                openBtn.addEventListener('click', () => {
+                    openOverlay(banner.folder + banner.htmlFile);
+                });
+                
+                bannerItem.appendChild(openBtn);
                 
                 const bannerContainer = document.createElement('div');
                 bannerContainer.className = 'banner-container';
@@ -202,7 +273,52 @@
             grid.innerHTML = ''; // Очищаем сетку
             loadBanners(); // Перезагружаем все баннеры
         }
+        function openOverlay(src) {
+    const overlay = document.getElementById('bannerOverlay');
+    const frame = document.getElementById('overlayFrame');
+
+    frame.src = src;
+    overlay.classList.add('active');
+    document.body.classList.add('overlay-open');
+
+    pauseBackgroundBanners(true);
+}
+
+function closeOverlay() {
+    const overlay = document.getElementById('bannerOverlay');
+    const frame = document.getElementById('overlayFrame');
+
+    overlay.classList.remove('active');
+    document.body.classList.remove('overlay-open');
+
+    frame.src = '';
+    pauseBackgroundBanners(false);
+}
+
+document.getElementById('overlayClose').addEventListener('click', closeOverlay);
+
+document.getElementById('bannerOverlay').addEventListener('click', function(e){
+    if(e.target === this){
+        closeOverlay();
+    }
+});
+function pauseBackgroundBanners(state) {
+    const iframes = document.querySelectorAll('.banner-container iframe');
+
+    iframes.forEach(frame => {
+        frame.style.visibility = state ? 'hidden' : 'visible';
+    });
+}
+
     </script>
+    <!-- Overlay -->
+<div id="bannerOverlay" class="overlay">
+    <div class="overlay-content">
+        <button class="overlay-close" id="overlayClose">✕</button>
+        <iframe id="overlayFrame" frameborder="0" scrolling="no"></iframe>
+    </div>
+</div>
+
 </body>
 </html>
 
