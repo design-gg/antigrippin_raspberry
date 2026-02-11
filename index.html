@@ -190,4 +190,76 @@ function loadBanners(){
         iframe.setAttribute("frameborder", "0");
 
         const openBtn = document.createElement('div');
-        openBtn.clas
+        openBtn.className = 'open-btn';
+        openBtn.textContent = 'открыть в окне';
+
+        openBtn.addEventListener('click', () => {
+            openOverlay(banner.folder + banner.htmlFile);
+        });
+
+        bannerContainer.appendChild(iframe);
+
+        bannerItem.appendChild(bannerText);
+        bannerItem.appendChild(bannerContainer);
+        bannerItem.appendChild(openBtn);
+
+        grid.appendChild(bannerItem);
+    });
+}
+
+function openOverlay(src){
+    const overlay = document.getElementById('bannerOverlay');
+    const frame = document.getElementById('overlayFrame');
+
+    frame.src = src;
+    overlay.classList.add('active');
+    document.body.classList.add('overlay-open');
+
+    pauseBackgroundBanners(true);
+}
+
+function closeOverlay(){
+    const overlay = document.getElementById('bannerOverlay');
+    const frame = document.getElementById('overlayFrame');
+
+    overlay.classList.remove('active');
+    document.body.classList.remove('overlay-open');
+
+    frame.src = '';
+    pauseBackgroundBanners(false);
+}
+
+function pauseBackgroundBanners(state){
+    const iframes = document.querySelectorAll('.banner-container iframe');
+
+    iframes.forEach(frame=>{
+        frame.style.pointerEvents = state ? 'none' : 'auto';
+        frame.style.filter = state ? 'brightness(0.6)' : 'none';
+    });
+}
+
+window.addEventListener('load', function(){
+
+    loadBanners();
+
+    document.getElementById('overlayClose')
+        .addEventListener('click', closeOverlay);
+
+    document.getElementById('bannerOverlay')
+        .addEventListener('click', function(e){
+            if(e.target === this){
+                closeOverlay();
+            }
+        });
+
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){
+            closeOverlay();
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
